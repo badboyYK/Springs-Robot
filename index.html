@@ -51,9 +51,7 @@
                 
 				
 			})
-			function randomRange(min,max){
-				return Math.random()*(max-min+1)+min;
-			}
+			
 			let ColorArray=['#253659','#03a696','#04bf90','#f27457','#bf665e'];
 			
             
@@ -63,14 +61,7 @@
 				cavas.width=innerWidth;
 				
             })
-            const wave={
-                y:center.y,
-                length:0.01,
-                amplitude:100,
-                frequence:0.01
-            };
-            let increment=wave.frequence;
-            let limit=100;
+            
 			class waveRun{
 				constructor(x,y,distance,color,vec,bet,direct){
 					this.x=x;
@@ -79,9 +70,6 @@
 					this.radius=10;
 					this.color= color;
 					this.vec=vec;
-					this.image = new Image();
-					this.image.src = '../image/note_3.png';
-					this.frameX = Math.ceil(Math.random()*4)-1;
 					this.size = 80;
 					this.bet = bet;
 					this.randX = Math.random()*280+100;
@@ -89,22 +77,12 @@
 					this.direct=direct;
 				}
 				draw(){
-					c.beginPath();
-					c.fillStyle = this.color;
-					//c.arc(this.x,this.y,this.radius,0,Math.PI*2);
-					
-					//c.drawImage(this.image,893*this.frameX,0,893,893,this.x-this.size/2,this.y-this.size/2,this.size,this.size);
-					c.fill();
-					c.closePath();
 				
-
-
 				}
 				update(){
 					this.draw();
 					this.x = 1366*this.direct.a+Math.abs(this.distance*Math.sin(timer))*this.direct.b;
-					//this.y = center.y+Math.sin(timer+this.distance)*100;
-					//this.x = center.x+(Math.cos(timer+this.distance)+Math.tan(timer)*Math.sin(timer))*this.randX;
+				
 					
 					this.y = center.y+this.vec*100+this.bet;
 					
@@ -114,20 +92,15 @@
 			let waveArray = [];
 			let particleCount = 50;
 			let distanceBall = 1366/particleCount;
-			for(let k=0;k<1;k++){
+		
 				
-				for(let i=0;i<particleCount;i++){
-					//waveArray.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?distanceBall:0)));
-					waveArray.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?1:-1),-160,{a:0,b:1}));
-
-				}
-               
+			for(let i=0;i<particleCount;i++){
+				waveArray.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?1:-1),-160,{a:0,b:1}));
 			}
+               
 			let item2 = [];
 			for(let i=0;i<particleCount;i++){
-					//waveArray.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?distanceBall:0)));
-					item2.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?1:-1),200,{a:1,b:-1}));
-
+				item2.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?1:-1),200,{a:1,b:-1}));
 			}
 			let timer = 0;
 			let glove = new Image();
