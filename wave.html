@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>CANVAS COURSE</title>
+		<style>
+			*{
+				padding:0;
+				margin:0;
+				box-sizing:border-box;
+				cursor:none;
+			}
+			body{
+				display:flex;
+				width:1366px;
+				height:768px;
+				background:#000;
+				overflow:hidden;
+			}
+			canvas{
+				
+			}
+		</style>
+	</head>
+	<body>
+		<canvas></canvas>
+		<script>
+			let cavas = document.querySelector('canvas');
+			cavas.width = window.innerWidth;
+			cavas.height=window.innerHeight;
+
+			console.log(cavas);
+
+			var c = cavas.getContext('2d');
+			
+			//animate
+			let mouse ={x:innerWidth/2,y:innerHeight/2};
+            let center={x:cavas.width/2,y:cavas.height/2};
+            let angle=0;
+			
+			addEventListener('resize',()=>{
+				cavas.height=innerHeight;
+				cavas.width=innerWidth;
+				
+				
+			})
+			addEventListener('click',(event)=>{
+                mouse.x=event.x;
+                mouse.y=event.y;
+                
+				
+			})
+			function randomRange(min,max){
+				return Math.random()*(max-min+1)+min;
+			}
+			let ColorArray=['#253659','#03a696','#04bf90','#f27457','#bf665e'];
+			
+            
+			
+			addEventListener('click',()=>{
+                cavas.height=innerHeight;
+				cavas.width=innerWidth;
+				
+            })
+            const wave={
+                y:center.y,
+                length:0.01,
+                amplitude:100,
+                frequence:0.01
+            };
+            let increment=wave.frequence;
+            let limit=100;
+			class waveRun{
+				constructor(x,y,distance,color,vec,bet,direct){
+					this.x=x;
+					this.y=y;
+					this.distance=distance;
+					this.radius=10;
+					this.color= color;
+					this.vec=vec;
+					this.image = new Image();
+					this.image.src = '../image/note_3.png';
+					this.frameX = Math.ceil(Math.random()*4)-1;
+					this.size = 80;
+					this.bet = bet;
+					this.randX = Math.random()*280+100;
+					this.randY = Math.random()*280;
+					this.direct=direct;
+				}
+				draw(){
+					c.beginPath();
+					c.fillStyle = this.color;
+					//c.arc(this.x,this.y,this.radius,0,Math.PI*2);
+					
+					//c.drawImage(this.image,893*this.frameX,0,893,893,this.x-this.size/2,this.y-this.size/2,this.size,this.size);
+					c.fill();
+					c.closePath();
+				
+
+
+				}
+				update(){
+					this.draw();
+					this.x = 1366*this.direct.a+Math.abs(this.distance*Math.sin(timer))*this.direct.b;
+					//this.y = center.y+Math.sin(timer+this.distance)*100;
+					//this.x = center.x+(Math.cos(timer+this.distance)+Math.tan(timer)*Math.sin(timer))*this.randX;
+					
+					this.y = center.y+this.vec*100+this.bet;
+					
+
+				}
+			}
+			let waveArray = [];
+			let particleCount = 50;
+			let distanceBall = 1366/particleCount;
+			for(let k=0;k<1;k++){
+				
+				for(let i=0;i<particleCount;i++){
+					//waveArray.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?distanceBall:0)));
+					waveArray.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?1:-1),-160,{a:0,b:1}));
+
+				}
+               
+			}
+			let item2 = [];
+			for(let i=0;i<particleCount;i++){
+					//waveArray.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?distanceBall:0)));
+					item2.push(new waveRun(0,0,i*distanceBall,`hsl(${Math.random()*360},50%,50%)`,(i&1?1:-1),200,{a:1,b:-1}));
+
+			}
+			let timer = 0;
+			let glove = new Image();
+			glove.src = '../animation/robot_1.png';
+			let frameLeft = 0;
+			let frameRight = 1;
+			let timeIn = 0;
+			let timeOut = 10;
+			function animate() {
+				requestAnimationFrame(animate);
+				c.fillStyle=`rgba(0,0,0,0.1)`;
+				c.fillRect(0,0,cavas.width,cavas.height);
+				//c.clearRect(0,0,innerWidth,innerHeight); //remove mọi thứ trong phạm vi màn hình
+				
+				for(let i=1;i<waveArray.length-1;i++){
+					//let distancePoint = Math.sqrt((waveArray[i+1].x-waveArray[i].x)**2+(waveArray[i+1].y-waveArray[i].y)**2)
+					c.save();
+					c.beginPath();
+					c.strokeStyle='#fff';
+					c.lineWidth = '2';
+					
+					//c.globalAlpha=Math.sin(distancePoint/500);
+					c.moveTo((waveArray[i].x+waveArray[i-1].x)/2,(waveArray[i].y+waveArray[i-1].y)/2);
+					c.quadraticCurveTo(waveArray[i].x,waveArray[i].y,(waveArray[i].x+waveArray[i+1].x)/2,(waveArray[i].y+waveArray[i+1].y)/2);
+					c.stroke();
+					//c.closePath();
+					c.restore();
+
+				}
+				
+				for(let i=1;i<item2.length-1;i++){
+					//let distancePoint = Math.sqrt((item2[i+1].x-item2[i].x)**2+(item2[i+1].y-item2[i].y)**2)
+					c.save();
+					c.beginPath();
+					c.strokeStyle='#fff';
+					c.lineWidth = '2';
+					
+					//c.globalAlpha=Math.sin(distancePoint/500);
+					
+					//c.moveTo(item2[i].x,item2[i].y);
+					//c.lineTo(item2[i+1].x,item2[i+1].y);
+			
+					c.moveTo((item2[i].x+item2[i-1].x)/2,(item2[i].y+item2[i-1].y)/2);
+					c.quadraticCurveTo(item2[i].x,item2[i].y,(item2[i].x+item2[i+1].x)/2,(item2[i].y+item2[i+1].y)/2);
+					c.stroke();
+					//c.closePath();
+					c.restore();
+
+				}
+				c.drawImage(glove,769*frameLeft,0,769,720,waveArray[waveArray.length-1].x-150,waveArray[waveArray.length-1].y-260,300,300);
+				c.drawImage(glove,769*frameRight,720,769,720,item2[item2.length-1].x-150,item2[item2.length-1].y-260,300,300);
+
+				waveArray.forEach(i=>i.update());
+				item2.forEach(i=>i.update());
+				if(timeIn>timeOut){
+					frameLeft = (frameLeft+1)%2;
+					frameRight = (frameRight+1)%2;
+					timeIn = 0;
+				}else{
+					timeIn++;
+				}
+				timer+=0.005;
+          
+			};
+            
+			
+			animate();
+
+		</script>
+	</body>
+</html>
